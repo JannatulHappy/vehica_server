@@ -1,5 +1,5 @@
 const express = require("express");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 const app = express();
 const cors = require("cors");
@@ -42,11 +42,51 @@ async function run() {
         brandName: brandName,
       };
       const result = await brandsCollection.find(query).toArray();
-      console.log("result",result);
+      console.log("result", result);
+      res.send(result);
+    });
+    // get single product using id
+
+    app.get("/api/singleProduct/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("id", id);
+      const query = {
+        _id: new ObjectId(id),
+      };
+      const result = await brandsCollection.findOne(query);
+      console.log(result);
       res.send(result);
     });
 
-   
+    // update single user
+
+    app.put("/api/products/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+
+      const filter = {
+        _id: new ObjectId(id),
+      };
+      const options = { upsert: true };
+      const updatedData = {
+        $set: {
+          name: data.name,
+          email: data.email,
+          brandName: data.brandName,
+          type: data.type,
+          priceInDollars: data.priceInDollars,
+          rating: data.rating,
+          image: data.image,
+        },
+      };
+      const result = await brandsCollection.updateOne(
+        filter,
+        updatedData,
+        options
+      );
+      res.send(result);
+    });
+
     // // get group of product using id
 
     // app.get("/api/products/:brandName", async (req, res) => {
