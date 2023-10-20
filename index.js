@@ -28,38 +28,54 @@ async function run() {
     await client.connect();
     const brandsCollection = client.db("vehicaDB").collection("brands");
 
-    // app.get("/api/products", (req, res) => {
+   
+    // get group of product using brand name
 
-    //     const db = client.db("your-database-name"); // Replace with your database name
-    //     const collection = db.collection("products");
+    app.get("/api/products/:brandName", async (req, res) => {
+      const brandName = req.params.brandName;
+      console.log("brandName", brandName);
+      const query = {
+        brandName: brandName,
+      };
+      const result = await brandsCollection.find(query).toArray();
+      console.log("result",result);
+      res.send(result);
+    });
 
-    //     collection.find().toArray((err, data) => {
-    //       if (err) throw err;
-    //       res.json(data);
-    //       client.close();
-    //     });
-    //   });
+   
+    // // get group of product using id
 
-    // app.post("/api/products", (req, res) => {
-    //   const productData = req.body;
+    // app.get("/api/products/:brandName", async (req, res) => {
+    //   const brandName = req.params.brandName;
+    //   console.log("brandName", brandName);
+    //   const query = {
+    //     brandName: brandName,
+    //   };
+    //   const result = await brandsCollection.find.toArray(query);
+    //   console.log(result);
+    //   res.send(result);
+    // });
 
-    //   console.log(productData);
+    // // get single data using id
 
-    //   brandsCollection.insertOne(productData, (err, data) => {
-    //     if (err) throw err;
-
-    //     res.status(200).send("Product added");
-    //   });
+    // app.get("/users/:id", async (req, res) => {
+    //   const id = req.params.id;
+    //   console.log("id", id);
+    //   const query = {
+    //     _id: new ObjectId(id),
+    //   };
+    //   const result = await userCollection.findOne(query);
+    //   console.log(result);
+    //   res.send(result);
     // });
     // post single data endpoint
-  app.post("/api/products", async (req, res) => {
-    const productData = req.body;
-    console.log("user", productData);
-    const result = await brandsCollection.insertOne(productData);
-    console.log(result);
-    res.status(200).send(result);
-   ;
-  });
+    app.post("/api/products", async (req, res) => {
+      const productData = req.body;
+      console.log("user", productData);
+      const result = await brandsCollection.insertOne(productData);
+      console.log(result);
+      res.status(200).send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
