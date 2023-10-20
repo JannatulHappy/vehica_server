@@ -28,7 +28,11 @@ async function run() {
     await client.connect();
     const brandsCollection = client.db("vehicaDB").collection("brands");
 
-   
+    app.get("/api/products", async (req, res) => {
+      const result = await brandsCollection.find().toArray();
+      console.log(result);
+      res.send(result);
+    });
     // get group of product using brand name
 
     app.get("/api/products/:brandName", async (req, res) => {
