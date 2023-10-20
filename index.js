@@ -27,6 +27,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const brandsCollection = client.db("vehicaDB").collection("brands");
+    const cartCollection = client.db("vehicaDB").collection("cart");
 
     app.get("/api/products", async (req, res) => {
       const result = await brandsCollection.find().toArray();
@@ -60,7 +61,7 @@ async function run() {
 
     // update single user
 
-    app.put("/api/products/:id", async (req, res) => {
+    app.put("/api/products/update/:id", async (req, res) => {
       const id = req.params.id;
       const data = req.body;
 
@@ -84,40 +85,25 @@ async function run() {
         updatedData,
         options
       );
+      console.log(result)
       res.send(result);
     });
 
-    // // get group of product using id
-
-    // app.get("/api/products/:brandName", async (req, res) => {
-    //   const brandName = req.params.brandName;
-    //   console.log("brandName", brandName);
-    //   const query = {
-    //     brandName: brandName,
-    //   };
-    //   const result = await brandsCollection.find.toArray(query);
-    //   console.log(result);
-    //   res.send(result);
-    // });
-
-    // // get single data using id
-
-    // app.get("/users/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   console.log("id", id);
-    //   const query = {
-    //     _id: new ObjectId(id),
-    //   };
-    //   const result = await userCollection.findOne(query);
-    //   console.log(result);
-    //   res.send(result);
-    // });
+   
     // post single data endpoint
     app.post("/api/products", async (req, res) => {
       const productData = req.body;
       console.log("user", productData);
       const result = await brandsCollection.insertOne(productData);
       console.log(result);
+      res.status(200).send(result);
+    });
+    // post single data endpoint
+    app.post("/api/product/myCart", async (req, res) => {
+      const productData = req.body;
+      console.log("user", productData);
+      const result = await cartCollection.insertOne(productData);
+      console.log(result,"added cart");
       res.status(200).send(result);
     });
 
