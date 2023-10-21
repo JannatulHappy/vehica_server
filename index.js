@@ -85,11 +85,10 @@ async function run() {
         updatedData,
         options
       );
-      console.log(result)
+      console.log(result);
       res.send(result);
     });
 
-   
     // post single data endpoint
     app.post("/api/products", async (req, res) => {
       const productData = req.body;
@@ -103,10 +102,32 @@ async function run() {
       const productData = req.body;
       console.log("user", productData);
       const result = await cartCollection.insertOne(productData);
-      console.log(result,"added cart");
+      console.log(result, "added cart");
       res.status(200).send(result);
     });
+    // get group of product using brand name
 
+    app.get("/api/products/cart/:email", async (req, res) => {
+      const email = req.params.email;
+      console.log("email", email);
+      const query = {
+        email: email,
+      };
+      const result = await cartCollection.find(query).toArray();
+      console.log("result", result);
+      res.send(result);
+    });
+    // delete single cart item
+    app.delete("/api/products/cart/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("id", id);
+      const query = {
+        _id: new ObjectId(id),
+      };
+      const result = await cartCollection.deleteOne(query);
+      console.log(result);
+      res.status(200).send(result);
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
