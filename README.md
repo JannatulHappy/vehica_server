@@ -9,7 +9,8 @@ This MERN Stack web project aims to build a brand-based e-commerce website with 
 ## Project Overview
 
 The backend code is implemented in Node.js using Express.js as the web framework. It handles various functionalities, including user authentication, product management, cart handling, and more.
-
+## Technology:
+Tailwind, React, Firebase, Express JS, MongoDB, Vercel
 ## Setup
 
 ```bash
